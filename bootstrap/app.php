@@ -15,6 +15,18 @@ $app = new Illuminate\Foundation\Application(
     $_ENV['APP_BASE_PATH'] ?? dirname(__DIR__)
 );
 
+// Vercel's filesystem is read-only except /tmp. Redirect bootstrap cache there.
+if (!empty($_ENV['VERCEL'])) {
+    $vercelBootstrapPath = sys_get_temp_dir() . '/bootstrap';
+    $vercelCachePath = $vercelBootstrapPath . '/cache';
+
+    if (!is_dir($vercelCachePath)) {
+        @mkdir($vercelCachePath, 0775, true);
+    }
+
+    $app->useBootstrapPath($vercelBootstrapPath);
+}
+
 /*
 |--------------------------------------------------------------------------
 | Bind Important Interfaces
