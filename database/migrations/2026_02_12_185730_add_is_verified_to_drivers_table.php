@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up()
+{
+    Schema::table('drivers', function (Blueprint $table) {
+        if (!Schema::hasColumn('drivers', 'is_verified')) {
+            $table->tinyInteger('is_verified')->default(0);
+        }
+    });
+}
+
+
+
+    /**
+     * Reverse the migrations.
+     */
+   public function down()
+{
+    Schema::table('drivers', function (Blueprint $table) {
+        if (Schema::hasColumn('drivers', 'is_verified')) {
+            $table->dropColumn('is_verified');
+        }
+    });
+}
+
+};
